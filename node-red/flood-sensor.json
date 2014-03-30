@@ -1,0 +1,124 @@
+[
+   {
+      "id":"577f625c.a8809c",
+      "type":"serial-port",
+      "serialport":"/dev/ttyAMA0",
+      "serialbaud":"115200",
+      "newline":"",
+      "addchar":"false"
+   },
+   {
+      "id":"a25f2284.5da0e",
+      "type":"serial in",
+      "name":"SRF Serial",
+      "serial":"577f625c.a8809c",
+      "x":82,
+      "y":75,
+      "z":"651458a9.9aeba8",
+      "wires":[
+         [
+            "7e782.fff8187e",
+            "5294f3c9.ad6b0c",
+            "74b29c05.8b4d64"
+         ]
+      ]
+   },
+   {
+      "id":"9823b273.67dc5",
+      "type":"debug",
+      "name":"",
+      "active":true,
+      "complete":"true",
+      "x":667,
+      "y":66,
+      "z":"651458a9.9aeba8",
+      "wires":[
+
+      ]
+   },
+   {
+      "id":"7e782.fff8187e",
+      "type":"function",
+      "name":"LLAP Parse",
+      "func":"// name: Parse LLAP message\n// outputs: 1\n// anything stored in context is kept available for next time we get called\ncontext.buff = context.buff || \"\";\ncontext.count = context.count || 0;\n\n// wait for an a and reset the buffer and counter\nif (msg.payload == \"a\") { context.count = 0; context.buff = \"\"; } // this does mean the a must NOT appear elsewhere in the message\n\n// buffer message\n// add payload to the buffer and increase the count\ncontext.buff = context.buff + msg.payload;\ncontext.count += 1;\n\n// transmit message\n// when we reach 11 then output the whole message, assumes length is the a plus 11 - may need to tweak...\nif (context.count == 12 ) {\n\tmsg.topic = context.buff.slice(1,3);\t// return the first two chars as the topic\n\tmsg.payload = context.buff.slice(3);\t// return rest of the buffer as the payload\n\treturn msg;\n}\nreturn null;",
+      "outputs":1,
+      "x":280,
+      "y":127,
+      "z":"651458a9.9aeba8",
+      "wires":[
+         [
+            "c3b9d16.f3c463",
+            "4f841e3a.b07be"
+         ]
+      ]
+   },
+   {
+      "id":"c3b9d16.f3c463",
+      "type":"function",
+      "name":"Ben's New LLAP Post-parse",
+      "func":"// expecting payload to be message content from LLAP\n// expecting topic to be deviceID\n\nvar d = new Date();\nvar timestamp = d.getTime();\n\nmystuff = msg.payload;\ndeviceid = msg.topic;\n\nsensortype = mystuff.substr(0,1);  // first character = sensor type\nsensorreading = mystuff.substr(1); // remaining chars = reading \nsensorreading = sensorreading.replace(/-/g, \"\");\n\nsensor = \"Unknown: \";\nswitch(sensortype)\n{\n\tcase \"U\":\n\tsensor = \"Ultrasonic: \";\n\tbreak;\n\tcase \"B\":\n\tsensor = \"Battery: \";\n\tbreak;\n\tdefault:\n\tsensor = \"None: \";\n\tsensorreading = \"N/A\";\n\tbreak;\t\n}\n\nmsg.debug =  dateTimeStamp(timestamp) + \" \" + deviceid + \" - \" + sensor + sensorreading;\nmsg.payload = dateTimeStamp(timestamp) + \",\" + deviceid + \",\" + sensortype + \",\" + sensorreading;\n\n//msg.deviceid = deviceid;\n//msg.sensortype = sensortype;\n//msg.sensorreading = sensortype;\n\nreturn msg;\n\n\n\n/**\n * Return a timestamp with the format \"yyyy-mm-dd h:MM:ss\"\n * @type {Date}\n */\n \nfunction dateTimeStamp() {\n// Create a date object with the current time\n  var now = new Date();\n \n// Create an array with the current month, day and time\n  var date = [ now.getFullYear(), now.getMonth() + 1, now.getDate(),  ];\n \n// Create an array with the current hour, minute and second\n  var time = [ now.getHours(), now.getMinutes(), now.getSeconds() ];\n \n// If seconds and minutes are less than 10, add a zero\n  for ( var i = 1; i < 3; i++ ) {\n    if ( time[i] < 10 ) {\n      time[i] = \"0\" + time[i];\n    }\n  }\n \n// Return the formatted string\n  return date.join(\"-\") + \" \" + time.join(\":\");\n}",
+      "outputs":1,
+      "x":525,
+      "y":163,
+      "z":"651458a9.9aeba8",
+      "wires":[
+         [
+            "9823b273.67dc5",
+            "82762c84.7d89d",
+            "503e4a7a.afc1b4"
+         ]
+      ]
+   },
+   {
+      "id":"82762c84.7d89d",
+      "type":"file",
+      "name":"LLAP CSV",
+      "filename":"llap-output.csv",
+      "appendNewline":true,
+      "overwriteFile":false,
+      "x":726,
+      "y":109,
+      "z":"651458a9.9aeba8",
+      "wires":[
+
+      ]
+   },
+   {
+      "id":"4f841e3a.b07be",
+      "type":"debug",
+      "name":"",
+      "active":true,
+      "complete":"true",
+      "x":459.4444274902344,
+      "y":79.22222137451172,
+      "z":"651458a9.9aeba8",
+      "wires":[
+
+      ]
+   },
+   {
+      "id":"503e4a7a.afc1b4",
+      "type":"twitter out",
+      "twitter":"",
+      "name":"Tweet @xxxxxxx",
+      "x":750.25,
+      "y":173.5,
+      "z":"651458a9.9aeba8",
+      "wires":[
+
+      ]
+   },
+   {
+      "id":"74b29c05.8b4d64",
+      "type":"debug",
+      "name":"",
+      "active":false,
+      "complete":false,
+      "x":260,
+      "y":71,
+      "z":"651458a9.9aeba8",
+      "wires":[
+
+      ]
+   }
+]
