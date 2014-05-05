@@ -12,7 +12,8 @@ sensortype = mystuff.substr(0,1);
 sensorreading = mystuff.substr(1); 
 
 // remaining chars = reading 
-sensorreading = sensorreading.replace(/-/g, \"\");
+// trim off trailing dashes
+sensorreading = sensorreading.replace(/-/g, "");
 
 
 sensor = "Unknown: ";
