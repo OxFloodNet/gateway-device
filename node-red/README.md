@@ -1,12 +1,15 @@
 #Node Red Code
 
-Import flood-sensor.js into Node Red and it will create the necessary flows.
+To create all the flows at once, import *flood-sensor.js* into Node Red and it will create the necessary flows.
+Individual flows' code can be found in the separate modules. These allow individual updating of nodes without a full import by using copy & paste.
 
-It was tested on Node Red 0.6.0 (Node.js version v0.8.22) 
+Code was tested on Node Red 0.6.0 (Node.js version v0.8.22) 
 
+## Flows
 The main flow consists of:
 Serial Port -> LLAP Parse (collate bytes into a valid LLAP message) -> New LLAP Parse (understand message content) -> CSV file
 
+## Message formats
 To allow maximum payload size we use custom message formats in LLAP. Example:
 
 R5U137-----
