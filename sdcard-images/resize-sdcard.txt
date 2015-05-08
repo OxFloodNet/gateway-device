@@ -1,0 +1,9 @@
+# Note: When using Win32DiskImager to copy an SD card it will copy the entire size of the device
+# This means it will grow to the size of the largest SD card you have and never reduce.
+# To get around this you can use dd or possible gparted, but this will not work on Windows.
+#
+# On windows you can use Oracle VirtualBox CLI commands to resize an SD card image:
+"C:\Program Files\Oracle\VirtualBox\VBoxManage" convertfromraw input.img input.vdi -format VDI --variant Standard
+"C:\Program Files\Oracle\VirtualBox\VBoxManage" createhd --filename output.vdi --size 7000 --format VDI --variant Standard
+"C:\Program Files\Oracle\VirtualBox\VBoxManage" clonehd input.vdi output.vdi --existing
+"C:\Program Files\Oracle\VirtualBox\VBoxManage" clonehd output.vdi output.img --format RAW
