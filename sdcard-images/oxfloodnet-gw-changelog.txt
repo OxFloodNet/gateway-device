@@ -4,6 +4,14 @@ v4.0.0 - Initial build with Raspbian, Node, Node Red and Oxfloodnet flows (autos
 v4.0.1 - Improvements to Oxfloodnet flows to enable MQTT report of ip address etc.
 v4.0.2 - Improvements to Oxfloodnet flows to enable node version number. Added user autossh & installed autossh client.
 v4.0.3 - Autossh enabled, /etc/tunnel/tunnel.sh added /etc/rc.local to do it at startup. Added ifconfig -a to console at boot
-v4.0.4 - dunno (node red sends device info payload every 15 mins)
+v4.0.4 - ???? 
+v4.0.5 - Shrink image to 3.5GB, (sub-version number a0)
+			Print image version on console at boot
+			Configuration file in boot partition (no keyboard and screen required) /boot/floodnet/config.json file allows us to set parameters using FAT16
+			Tunnels script in boot partition /boot/floodnet/tunnel.sh - edit this to set tunnel end port
+			Key used to identify gateway
+			Sensors still transmits data via the gateway using device ID e.g. /users/ben/floodnet/20/D (bridge does the lookup)
+			Node Red sends gateway device info payload (including subdevices tree) every 15 mins using dnsKey root topic
 TODO:
-v4.0.5 - Shrink image to 3.5GB, Announce image number, /boot/config.txt file allows us to set parameters using FAT32?
+4.0.6 - Mappings between the sensor id and the dnsKey defined in the DNS registry using the management UI.
+		node red sends device info payload at start
