@@ -12,6 +12,7 @@ v4.0.5 - Shrink image to 3.5GB, (sub-version number a0)
 			Key used to identify gateway
 			Sensors still transmits data via the gateway using device ID e.g. /users/ben/floodnet/20/D (bridge does the lookup)
 			Node Red sends gateway device info payload (including subdevices tree) every 15 mins using dnsKey root topic
-TODO:
 4.0.6 - Mappings between the sensor id and the dnsKey defined in the DNS registry using the management UI.
 		node red sends device info payload at start
+4.0.7 - Custom mqtt conponent in node-red capable of accpeting mqtt broker configurations at run-time 
+4.0.8 - New verison of the dns-query component able to verify the authenticity of the record from the registry.
